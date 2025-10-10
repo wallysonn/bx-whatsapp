@@ -1,0 +1,57 @@
+{
+    "id": 99999,
+    "event": {
+        "name": "TICKET_CREATED",
+        "date": "yyyy-MM-dd HH:mm:ss.SSS",
+        "origin": "CHAT/REPORT"
+    },
+    "contact": {
+        "id": "5511999999999",
+        "name": "name",
+        "createdAt": "yyyy-MM-dd HH:mm:ss.SSS",
+        "channel": {
+            "type": "WHATSAPP",
+            "id": "999999"
+        },
+        "fields": {
+            "Veiculo": "",
+            "Quantidade": "",
+            "Bateria": "",
+            "RValorUnitario": "",
+            "RValorTotal": "",
+            "FormaDePagamento": "",
+            "TemSucata": "",
+            "Status": "",
+            "Endereco": "",
+            "LocalizacaoZap": "",
+            "Observacao": "",
+            "LojaDeAtendimento": "",
+            "nome": ""
+        }
+    },
+    "ticket": {
+        "protocol": 99999,
+        "creationFlow": "CONTACT/AGENT/API",
+        "createdAt": "yyyy-MM-dd HH:mm:ss.SSS",
+        "reason": "reason",
+        "notes": [{
+            "agent": "agent",
+            "text": "text",
+            "createdAt": "yyyy-MM-dd HH:mm:ss.SSS"
+        }],
+        "tags": [{
+            "text": "tag",
+            "color": "#FFF",
+            "backgroundColor": "#e7a316",
+            "createdAt": "yyyy-MM-dd HH:mm:ss.SSS"
+        }],
+        "department": {
+            "uuid": "123e4567-e89b-12d3-a456-426614174000",
+            "name": "departmentName"
+        },
+        "agent": {
+            "uuid": "123e4567-e89b-12d3-a456-426614174000",
+            "name": "agentName"
+        }
+    }
+}

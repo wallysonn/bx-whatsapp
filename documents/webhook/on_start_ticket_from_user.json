@@ -1,0 +1,150 @@
+{
+  id: 4540171,
+  customerUuid: '800a9cdc-4698-4256-a2d6-52f6256c5464',
+  event: {
+    name: 'TICKET_STARTED',
+    date: '2023-12-27 12:36:46.556'
+  },
+  contact: {
+    id: '5598981147899',
+    name: 'Jaime',
+    createdAt: '2022-11-25 10:41:07.096',
+    channel: {
+      type: 'WHATSAPP',
+      id: '559830421057'
+    },
+    fields: {
+      Bateria: 'HNP50GD',
+      Endereco: 'RUA XXX',
+      FormaDePagamento: 'À AJUSTAR',
+      LocalizacaoZap: null,
+      LojaDeAtendimento: '102 JARACATI',
+      Observacao: null,
+      Quantidade: '',
+      RValorTotal: '450,00',
+      RValorUnitario: '450,00',
+      Status: 'VENDA EFETUADA',
+      TemSucata: 'SIM',
+      Veiculo: ''
+    }
+  },
+  ticket: {
+    protocol: 280488073,
+    creationFlow: 'AGENT',
+    createdAt: '2023-12-27 12:36:46.556',
+    evaluation: '',
+    finishedAt: '',
+    reason: '',
+    notes: [],
+    tags: [],
+    department: {
+      uuid: 'f6ef072d-4f78-472e-9584-04418dd7beff',
+      name: 'Bateria Express'
+    },
+    agent: {
+      uuid: '4f443b13-17e7-4a90-8d61-fcbf0060fb23',
+      name: '[Bateria Express] Alessandro'
+    }
+  }
+}
+//kafka producer sending {
+//  event: {
+//    date: '2023-12-27 12:36:46',
+//    name: 'TICKET_STARTED'
+//  },
+//  contact: {
+//    id: '5598981147899',
+//    channel: {
+//      type: 'WHATSAPP',
+//      id: '559830421057'
+//    },
+//    name: 'Jaime',
+//    ddi: '55',
+//    ddd: '98',
+//    phone: '98981147899'
+//  },
+//  ticket: {
+//    agent: {
+//      name: '[Bateria Express] Alessandro',
+//      uuid: '4f443b13-17e7-4a90-8d61-fcbf0060fb23'
+//    },
+//    oldAgent: {},
+//    protocol: 280488073
+//  },
+//  id: 4540171
+//}
+//data received {
+//  id: 4540168,
+//  customerUuid: '800a9cdc-4698-4256-a2d6-52f6256c5464',
+//  event: {
+//    name: 'TICKET_CREATED',
+//    date: '2023-12-27 12:36:46.556'
+//  },
+//  contact: {
+//    id: '5598981147899',
+//    name: 'Jaime',
+//    createdAt: '2022-11-25 10:41:07.096',
+//    channel: {
+//      type: 'WHATSAPP',
+//      id: '559830421057'
+//    },
+//    fields: {
+//      Bateria: 'HNP50GD',
+//      Endereco: 'RUA XXX',
+//      FormaDePagamento: 'À AJUSTAR',
+//      LocalizacaoZap: null,
+//      LojaDeAtendimento: '102 JARACATI',
+//      Observacao: null,
+//      Quantidade: '',
+//      RValorTotal: '450,00',
+//      RValorUnitario: '450,00',
+//      Status: 'VENDA EFETUADA',
+//      TemSucata: 'SIM',
+//      Veiculo: ''
+//    }
+//  },
+//  ticket: {
+//    protocol: 280488073,
+//    creationFlow: 'AGENT',
+//    createdAt: '2023-12-27 12:36:46.556',
+//    evaluation: '',
+//    finishedAt: '',
+//    reason: '',
+//    notes: [],
+//    tags: [],
+//    department: {
+//      uuid: 'f6ef072d-4f78-472e-9584-04418dd7beff',
+//      name: 'Bateria Express'
+//    },
+//    agent: {
+//      uuid: '4f443b13-17e7-4a90-8d61-fcbf0060fb23',
+//      name: '[Bateria Express] Alessandro'
+//    }
+//  }
+//}
+//kafka producer sending {
+//  event: {
+//    date: '2023-12-27 12:36:46',
+//    name: 'TICKET_CREATED'
+//  },
+//  contact: {
+//    id: '5598981147899',
+//    channel: {
+//      type: 'WHATSAPP',
+//      id: '559830421057'
+//    },
+//    name: 'Jaime',
+//    ddi: '55',
+//    ddd: '98',
+//    phone: '98981147899'
+//  },
+//  ticket: {
+//    agent: {
+//      name: '[Bateria Express] Alessandro',
+//      uuid: '4f443b13-17e7-4a90-8d61-fcbf0060fb23'
+//    },
+//    oldAgent: {},
+//    protocol: 280488073
+//  },
+//  id: 4540168
+//}

@@ -1,0 +1,28 @@
+{
+  "name": "bx_whatsapp",
+  "version": "1.0.0",
+  "description": "Microservice for WhatsApp Integration",
+  "author": "Walison Gomes <wgwalisongomes@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/app.ts",
+    "start": "node app.js",
+    "build": "npx tsc"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.864.0",
+    "@aws-sdk/s3-request-presigner": "^3.864.0",
+    "axios": "^1.4.0",
+    "date-fns": "^2.30.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "kafkajs": "^2.2.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^24.3.0",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.5"
+  }
+}

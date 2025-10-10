@@ -1,0 +1,5 @@
+node_modules
+.vscode
+src/logs/history
+.idea
+.env
