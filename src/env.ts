@@ -7,9 +7,9 @@ export const UPLOAD_PATH = process.env.UPLOAD_PATH || '/tmp'
 export const KAFKA = {
   HOST: process.env.KAFKA_HOST || 'localhost',
   PORT: process.env.KAFKA_PORT || 9092,
-  TOPIC: process.env.KAFKA_TOPIC || 'smbot',
-  CLIENT_ID: process.env.KAFKA_CLIENT_ID || 'smbot',
-  GROUP_ID: process.env.KAFKA_GROUP_ID || 'smbot'
+  TOPIC: process.env.KAFKA_TOPIC || 'whatsapp',
+  CLIENT_ID: process.env.KAFKA_CLIENT_ID || 'whatsapp',
+  GROUP_ID: process.env.KAFKA_GROUP_ID || 'whatsapp'
 }
 export const AWS_S3 = {
   REGION: process.env.AWS_REGION || 'us-east-1',
