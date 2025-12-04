@@ -74,6 +74,9 @@ export class ProviderService {
 
     // 1. Se foi especificado um channelId, usa esse canal
     if (messageRequest.channelId) {
+      console.log('channels for tenant', tenant.channels)
+      console.log('messageRequest', messageRequest)
+
       selectedChannel = tenant.channels?.find(
         channel => channel.identify === messageRequest.channelId && channel.active
       )
@@ -94,7 +97,7 @@ export class ProviderService {
     }
     // 3. Caso contrário, devolve erro
     else {
-     throw new Error('Nenhum canal ativo encontrado para este tenant')
+      throw new Error('Nenhum canal ativo encontrado para este tenant')
     }
 
     // Cria e retorna a instância do provider
