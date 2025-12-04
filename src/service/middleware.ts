@@ -15,6 +15,8 @@ export default function (req: express.Request, res: express.Response, next: expr
     return res.status(401).json({ message: 'authentication failed. Tenant not found' })
   }
   const tenant: ITenant = JSON.parse(tenantData)
+
+  console.log('middleware tenant', tenant)
   ;(req as any).tenant = tenant
 
   next()
