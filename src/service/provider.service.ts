@@ -74,6 +74,7 @@ export class ProviderService {
 
     // 1. Se foi especificado um channelId, usa esse canal
     if (messageRequest.channelId) {
+      console.log('tenant', tenant)
       console.log('channels for tenant', tenant.channels)
       console.log('messageRequest', messageRequest)
 
