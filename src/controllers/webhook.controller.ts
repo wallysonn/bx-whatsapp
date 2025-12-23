@@ -99,6 +99,28 @@ export default class WebhookController extends Controller {
     })
   }
 
+
+  onConnectionStatus = async (req: Request, res: Response) => {
+    const payload = req.body
+    const tenant = this.getTenant(req)
+
+    console.log('webhook - onConnectionStatus', payload)
+    console.log('normalizando evento...')
+    const normalized = MessageNormalizerService.normalizeWebhookConnectionStatus(payload)
+    console.log('normalized', normalized)
+    //envia para kafka
+
+    await sendMessage('connection-status', {
+      id: Date.now(),
+      tenant: tenant,
+      timestamp: new Date().toISOString(),
+      ...normalized,
+    }, tenant)
+
+    return res.status(200).json(normalized)
+
+  }
+
   private async processNormalizedMessage(message: INormalizedMessage, tenant: any) {
     // Converter mensagem normalizada para formato Kafka
     const kafkaMessage = this.convertToKafkaFormat(message, tenant)

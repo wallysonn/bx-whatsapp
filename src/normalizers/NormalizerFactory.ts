@@ -1,5 +1,6 @@
 import { IMessageNormalizer } from '../interfaces/IMessageNormalizer'
 import { WApiNormalizer } from './WApiNormalizer'
+import { IProviderConnectionStatus } from '../providers/interfaces/provider-connection-status.interface'
 
 export class NormalizerFactory {
   private static normalizers: IMessageNormalizer[] = [
@@ -31,5 +32,15 @@ export class NormalizerFactory {
     }
 
     return normalizer.normalizeStatusMessage(webhookPayload)
+  }
+
+  static normalizeConnectionStatus(webhookPayload: any): IProviderConnectionStatus {
+    const normalizer = this.getNormalizer(webhookPayload)
+
+    if (!normalizer) {
+      throw new Error('Nenhum normalizador encontrado para este payload')
+    }
+
+    return normalizer.normalizeConnectionStatus(webhookPayload)
   }
 }

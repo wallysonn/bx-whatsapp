@@ -3,7 +3,7 @@ import { connectProducer } from '../kafka/producer'
 import { connectConsumer } from '../kafka/consumer'
 import { EXPRESS_PORT, VERSION } from '../env'
 import middleware from './middleware'
-import { webhookRoutes, messageRoutes } from '../routes'
+import { webhookRoutes, messageRoutes, instanceRoutes } from '../routes'
 
 const app = express()
 app.use(express.json())
@@ -14,6 +14,7 @@ app.use(middleware)
 // use routes
 app.use(webhookRoutes)
 app.use(messageRoutes)
+app.use(instanceRoutes)
 
 // route default
 app.use('/', (req: express.Request, res: express.Response) => {

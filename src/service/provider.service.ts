@@ -140,6 +140,7 @@ export class ProviderService {
     }
   }
 
+
   /**
    * Cria uma instância do provider baseado no canal
    */

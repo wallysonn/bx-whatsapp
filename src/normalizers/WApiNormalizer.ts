@@ -1,12 +1,14 @@
 import { IMessageNormalizer } from '../interfaces/IMessageNormalizer'
 import { IMessageStatus } from '../interfaces/IMessageStatus'
 import { INormalizedMessage } from '../interfaces/INormalizedMessage'
-
+import { IProviderConnectionStatus } from '../providers/interfaces/provider-connection-status.interface'
+import { DateTime } from 'luxon'
 export class WApiNormalizer implements IMessageNormalizer {
   canHandle(webhookPayload: any): boolean {
     return (
       (webhookPayload.event === 'webhookReceived' && webhookPayload.instanceId && webhookPayload.msgContent) ||
-      (webhookPayload.event === 'webhookStatus' && webhookPayload.instanceId && webhookPayload.status)
+      (webhookPayload.event === 'webhookStatus' && webhookPayload.instanceId && webhookPayload.status) ||
+      (['webhookDisconnected', 'webhookConnected'].includes(webhookPayload.event)  && webhookPayload.instanceId)
     )
   }
 
@@ -52,6 +54,17 @@ export class WApiNormalizer implements IMessageNormalizer {
       timestamp: payload.moment * 1000,
       status: payload.status.toString().toLowerCase()
     }
+  }
+
+  normalizeConnectionStatus(payload: any): IProviderConnectionStatus {
+
+    return {
+      status: payload.event === 'webhookDisconnected' && payload.disconnected == true
+        ? 'disconnected' : 'connected',
+      instanceId: payload.instanceId,
+      eventMoment: (payload.moment || 0) * 1000,
+    }
+
   }
 
   private normalizeContent(msgContent: any): INormalizedMessage['content'] {

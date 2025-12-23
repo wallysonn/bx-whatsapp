@@ -7,5 +7,6 @@ const webhookController = new WebhookController()
 
 router.post('/webhook/message', webhookController.onReceivedMessage)
 router.post('/webhook/message-status', webhookController.onStatusMessage)
+router.post('/webhook/connection-status', webhookController.onConnectionStatus)
 
 export default router
