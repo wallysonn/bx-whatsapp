@@ -3,8 +3,8 @@ import { IMessageStatus } from '../interfaces/IMessageStatus'
 import { INormalizedMessage } from '../interfaces/INormalizedMessage'
 import { ITenant } from '../interfaces/ITenant'
 import { IProviderConnectionStatus } from '../providers/interfaces/provider-connection-status.interface'
-import { DateTime } from 'luxon'
-export class WAPINormalizer implements IMessageNormalizer {
+
+export class WapiNormalizer implements IMessageNormalizer {
   canHandle(webhookPayload: any): boolean {
     return (
       (webhookPayload.event === 'webhookReceived' && webhookPayload.instanceId && webhookPayload.msgContent) ||

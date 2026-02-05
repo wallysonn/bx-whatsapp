@@ -1,4 +1,4 @@
-import { WABAProvider } from './../providers/waba.provider'
+import { WabaProvider } from '../providers/waba.provider'
 import { IMessageNormalizer } from '../interfaces/IMessageNormalizer'
 import { IMessageStatus } from '../interfaces/IMessageStatus'
 import { INormalizedMessage } from '../interfaces/INormalizedMessage'
@@ -9,8 +9,8 @@ import { IChannel } from '../interfaces/IChannel'
 import { GeolocationUtils } from '../utils/geolocation'
 import { ConvertUtil } from '../utils/convert'
 
-export class WABANormalizer implements IMessageNormalizer {
-  private provider: WABAProvider | null = null
+export class WabaNormalizer implements IMessageNormalizer {
+  private provider: WabaProvider | null = null
 
   canHandle(webhookPayload: any): boolean {
     return webhookPayload.object === 'whatsapp_business_account'
@@ -35,7 +35,7 @@ export class WABANormalizer implements IMessageNormalizer {
       throw new Error('Payload inválido: Nenhum canal encontrado.')
     }
 
-    this.provider = ProviderService.createProviderInstance(channel) as WABAProvider
+    this.provider = ProviderService.createProviderInstance(channel) as WabaProvider
 
     const normalized: INormalizedMessage = {
       messageId: message.id,

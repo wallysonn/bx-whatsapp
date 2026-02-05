@@ -23,7 +23,7 @@ interface MediaDownloadResult {
   fileSize: number
 }
 
-export class WABAProvider extends Provider implements IProviderMessage {
+export class WabaProvider extends Provider implements IProviderMessage {
   private readonly API_URL: string = 'https://graph.facebook.com'
   private baseUrl: string
   private config: WabaProviderConfigInterface

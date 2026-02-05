@@ -1,7 +1,7 @@
 import { IProvider } from '../interfaces/IProvider'
 import { IProviderMessage } from './interfaces/provider-message.interface'
-import { WABAProvider } from './waba.provider'
-import { WAPIProvider } from './wapi.provider'
+import { WabaProvider } from './waba.provider'
+import { WapiProvider } from './wapi.provider'
 
 export class ProviderFactory {
   private static providers: Map<string, any> = new Map()
@@ -26,8 +26,8 @@ export class ProviderFactory {
 
   // Inicializa os providers disponíveis
   static initialize() {
-    this.registerProvider('wapi', WAPIProvider)
-    this.registerProvider('waba', WABAProvider)
+    this.registerProvider('wapi', WapiProvider)
+    this.registerProvider('waba', WabaProvider)
   }
 }
 

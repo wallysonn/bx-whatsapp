@@ -1,11 +1,11 @@
 import { IMessageNormalizer } from '../interfaces/IMessageNormalizer'
 import { ITenant } from '../interfaces/ITenant'
 import { IProviderConnectionStatus } from '../providers/interfaces/provider-connection-status.interface'
-import { WABANormalizer } from './WABANormalizer'
-import { WAPINormalizer } from './WAPINormalizer'
+import { WabaNormalizer } from './WabaNormalizer'
+import { WapiNormalizer } from './WapiNormalizer'
 
 export class NormalizerFactory {
-  private static normalizers: IMessageNormalizer[] = [new WAPINormalizer(), new WABANormalizer()]
+  private static normalizers: IMessageNormalizer[] = [new WapiNormalizer(), new WabaNormalizer()]
 
   static getNormalizer(webhookPayload: any): IMessageNormalizer | null {
     return this.normalizers.find(normalizer => normalizer.canHandle(webhookPayload)) || null

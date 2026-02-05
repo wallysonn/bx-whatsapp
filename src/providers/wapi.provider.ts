@@ -2,7 +2,7 @@ import { IMessageConfirm } from './interfaces/message-confirm.interface'
 import { IProviderMessage } from './interfaces/provider-message.interface'
 import { Provider } from './provider'
 
-export class WAPIProvider extends Provider implements IProviderMessage {
+export class WapiProvider extends Provider implements IProviderMessage {
   private baseUrl: string
   private instanceId: string
   private token: string
