@@ -28,16 +28,14 @@ jobs:
             set -e
             cd ~/bx-application/prebuild/bx-whatsapp
             git pull origin main
-
             yarn install
             yarn build
-
-            rsync -av --delete \
-              build/ \
-              node_modules/ \
-              pm2-ecosystem.config.js \
-              .env \
-              ~/bx-application/bx-whatsapp/
-
-            cd ~/bx-application/bx-whatsapp
+            cp pm2-ecosystem.config.js build/
+            cp package.json build/
+            cp .env build/
+            cd build
+            yarn install
+            cd ..
+            cp -R build/ ~/bx-application/bx-whatsapp/
+            cd ~/bx-application/bx-whatsapp/build/
             pm2 restart pm2-ecosystem.config.js --env production
