@@ -1,6 +1,7 @@
 import { IMessageNormalizer } from '../interfaces/IMessageNormalizer'
 import { IMessageStatus } from '../interfaces/IMessageStatus'
 import { INormalizedMessage } from '../interfaces/INormalizedMessage'
+import { ITenant } from '../interfaces/ITenant'
 import { IProviderConnectionStatus } from '../providers/interfaces/provider-connection-status.interface'
 import { DateTime } from 'luxon'
 export class WAPINormalizer implements IMessageNormalizer {
@@ -12,7 +13,7 @@ export class WAPINormalizer implements IMessageNormalizer {
     )
   }
 
-  async normalize(payload: any): Promise<INormalizedMessage> {
+  async normalize(payload: any, tenant: ITenant): Promise<INormalizedMessage> {
     const normalized: INormalizedMessage = {
       messageId: payload.messageId,
       instanceId: payload.instanceId,
