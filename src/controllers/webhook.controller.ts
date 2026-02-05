@@ -22,14 +22,6 @@ export default class WebhookController extends Controller {
   integrationValidate = async (req: Request, res: Response) => {
     const params = req.query as any
 
-    console.log('webhook - params', params)
-    /**
-     * x-api-key': '7d8ec7c7-300b-46c6-987b-bfb459cf50a7',
-  'hub.mode': 'subscribe',
-  'hub.challenge': '1719650147',
-  'hub.verify_token': '7d8ec7c7-300b-46c6-987b-bfb459cf50a7'
-     */
-
     const mode = params['hub.mode'] ?? null
     const token = params['hub.verify_token'] ?? null
     const challenge = params['hub.challenge'] ?? null
