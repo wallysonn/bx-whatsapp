@@ -6,7 +6,7 @@ name: Node.js CD
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ main ]
+    branches: [main]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -34,7 +34,7 @@ jobs:
             cp package.json build/
             cp .env build/
             cd build
-            yarn install --production
+            yarn install
             cd ..
             cp -R build/ ~/bx-application/bx-whatsapp/
             cd ~/bx-application/bx-whatsapp/build/
