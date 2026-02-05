@@ -3,7 +3,7 @@ module.exports = {
   apps: [
     {
       name: 'bx-whatsapp',
-      script: 'app.js', // ou o entrypoint real
+      script: 'build/app.js', // ou o entrypoint real
       interpreter: 'node',
       node_args: '--enable-source-maps',
       env_production: {
