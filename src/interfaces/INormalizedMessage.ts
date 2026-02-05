@@ -3,6 +3,8 @@ import { IContactMessage } from './IContactMessage'
 export interface INormalizedMessage {
   // Dados básicos da mensagem
   messageId: string
+  messageRefId?: string
+  forwarded: boolean
   instanceId: string
   connectedPhone: string
   fromMe: boolean

@@ -1,6 +1,7 @@
 import { IProvider } from '../interfaces/IProvider'
 import { IProviderMessage } from './interfaces/provider-message.interface'
-import { WApiProvider } from './wapi.provider'
+import { WABAProvider } from './waba.provider'
+import { WAPIProvider } from './wapi.provider'
 
 export class ProviderFactory {
   private static providers: Map<string, any> = new Map()
@@ -14,6 +15,8 @@ export class ProviderFactory {
   static createProvider(providerConfig: IProvider, ...args: any[]): IProviderMessage {
     const ProviderClass = this.providers.get(providerConfig.name)
 
+    console.log('provider config', providerConfig)
+
     if (!ProviderClass) {
       throw new Error(`Provider ${providerConfig.name} não encontrado`)
     }
@@ -23,10 +26,8 @@ export class ProviderFactory {
 
   // Inicializa os providers disponíveis
   static initialize() {
-    this.registerProvider('wapi', WApiProvider)
-    // Aqui você pode registrar outros providers no futuro
-    // this.registerProvider('telegram', TelegramProvider)
-    // this.registerProvider('sms', SMSProvider)
+    this.registerProvider('wapi', WAPIProvider)
+    this.registerProvider('waba', WABAProvider)
   }
 }
 

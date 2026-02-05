@@ -1,0 +1,56 @@
+{
+  "dados": {
+    "RN": false,
+    "Prestador": {
+      "Uf": "MG",
+      "Cnes": "4410777",
+      "Cnpj": "18428663000177",
+      "Cidade": "ITAÚNA",
+      "IdCopass": "00000000913677",
+      "NomePrestador": "NORTHOS - NUCLEO AVANCADO DE ORTOPEDIA"
+    },
+    "TipoGuiaCod": "1",
+    "Beneficiario": {
+      "UF": "MG",
+      "CEP": "35460000",
+      "CPF": "02734580608",
+      "Nome": "GIOVANIA CANDIDA JESUS DE PAULO",
+      "Sexo": 3,
+      "Plano": "Plano Copass Completo Ativos",
+      "Bairro": "PROGRESSO",
+      "Cidade": "BRUMADINHO",
+      "Numero": "34",
+      "IdCopass": "42299",
+      "Matricula": "000211320101",
+      "Telefones": "",
+      "Logradouro": "Alameda RUA JOAO DE CASTRO",
+      "TipoVinculo": "Dependente",
+      "CartaoCopass": "12061985",
+      "DataNascimento": "1974-04-04",
+      "NomeBeneficiario": "GIOVANIA CANDIDA JESUS DE PAULO"
+    },
+    "CidSecundario": [],
+    "GuiaOperadora": "14225913",
+    "Procedimentos": [
+      {
+        "DUT": "1",
+        "Porte": "1",
+        "Codigo": "10101012",
+        "ViaAcesso": "1",
+        "CodigoTabela": "22",
+        "QtdSolicitada": 1,
+        "ValorSolicitado": 122
+      }
+    ],
+    "DataSolicitacao": "2026-02-02",
+    "DadosSolicitante": {
+      "Uf": "MG",
+      "Cbo": "225270",
+      "Conselho": "6",
+      "NumeroConselho": "45573",
+      "NomeProfissional": "RAFAEL ALVES RODRIGUES"
+    }
+  },
+  "method": "guia_autorizacao",
+  "operadora": 416568
+}

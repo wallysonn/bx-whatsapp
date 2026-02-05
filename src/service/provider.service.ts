@@ -8,6 +8,7 @@ export interface IBaseMessageRequest {
   phone: string
   channelId?: string // ID do canal específico
   providerName?: string // Nome do provider específico
+  messageRefId?: string // ID da mensagem no registry
 }
 
 // Interfaces específicas para cada tipo de mensagem
@@ -113,19 +114,34 @@ export class ProviderService {
 
     switch (messageRequest.type) {
       case 'text':
-        return await provider.sendMessageText(messageRequest.phone, messageRequest.message)
+        return await provider.sendMessageText(messageRequest.phone, messageRequest.message, messageRequest.messageRefId)
 
       case 'image':
-        return await provider.sendMessageImage(messageRequest.phone, messageRequest.image)
+        return await provider.sendMessageImage(
+          messageRequest.phone,
+          messageRequest.image,
+          messageRequest.caption,
+          messageRequest.messageRefId
+        )
 
       case 'video':
-        return await provider.sendMessageVideo(messageRequest.phone, messageRequest.video)
+        return await provider.sendMessageVideo(
+          messageRequest.phone,
+          messageRequest.video,
+          messageRequest.caption,
+          messageRequest.messageRefId
+        )
 
       case 'audio':
-        return await provider.sendMessageAudio(messageRequest.phone, messageRequest.audio)
+        return await provider.sendMessageAudio(messageRequest.phone, messageRequest.audio, messageRequest.messageRefId)
 
       case 'document':
-        return await provider.sendMessageFile(messageRequest.phone, messageRequest.document)
+        return await provider.sendMessageFile(
+          messageRequest.phone,
+          messageRequest.document,
+          messageRequest.filename,
+          messageRequest.messageRefId
+        )
 
       case 'location':
         // Assumindo que vai implementar sendMessageLocation no provider
@@ -140,17 +156,18 @@ export class ProviderService {
     }
   }
 
-
   /**
    * Cria uma instância do provider baseado no canal
    */
-  private static createProviderInstance(channel: IChannel): IProviderMessage {
+  static createProviderInstance(channel: IChannel): IProviderMessage {
     const provider = channel.provider
 
     switch (provider.name) {
       case 'wapi':
         const { instanceId, token } = channel.config || {}
         return ProviderFactory.createProvider(provider, instanceId, token)
+      case 'waba':
+        return ProviderFactory.createProvider(provider, channel.config || {})
 
       default:
         throw new Error(`Provider ${provider.name} não suportado`)

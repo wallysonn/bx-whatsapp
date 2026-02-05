@@ -1,12 +1,13 @@
 import { IMessageStatus } from '../interfaces/IMessageStatus'
 import { INormalizedMessage } from '../interfaces/INormalizedMessage'
+import { ITenant } from '../interfaces/ITenant'
 import { NormalizerFactory } from '../normalizers/NormalizerFactory'
 import { IProviderConnectionStatus } from '../providers/interfaces/provider-connection-status.interface'
 
 export class MessageNormalizerService {
-  static normalizeWebhookMessage(webhookPayload: any): INormalizedMessage {
+  static async normalizeWebhookMessage(webhookPayload: any, tenant: ITenant): Promise<INormalizedMessage> {
     try {
-      return NormalizerFactory.normalize(webhookPayload)
+      return await NormalizerFactory.normalize(webhookPayload, tenant)
     } catch (error: any) {
       console.error('Erro ao normalizar mensagem:', error)
       throw new Error(`Falha na normalização da mensagem: ${error.message ?? 'Erro desconhecido'}`)

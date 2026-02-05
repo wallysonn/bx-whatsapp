@@ -3,19 +3,21 @@ import { IMessageStatus } from '../interfaces/IMessageStatus'
 import { INormalizedMessage } from '../interfaces/INormalizedMessage'
 import { IProviderConnectionStatus } from '../providers/interfaces/provider-connection-status.interface'
 import { DateTime } from 'luxon'
-export class WApiNormalizer implements IMessageNormalizer {
+export class WAPINormalizer implements IMessageNormalizer {
   canHandle(webhookPayload: any): boolean {
     return (
       (webhookPayload.event === 'webhookReceived' && webhookPayload.instanceId && webhookPayload.msgContent) ||
       (webhookPayload.event === 'webhookStatus' && webhookPayload.instanceId && webhookPayload.status) ||
-      (['webhookDisconnected', 'webhookConnected'].includes(webhookPayload.event)  && webhookPayload.instanceId)
+      (['webhookDisconnected', 'webhookConnected'].includes(webhookPayload.event) && webhookPayload.instanceId)
     )
   }
 
-  normalize(payload: any): INormalizedMessage {
+  async normalize(payload: any): Promise<INormalizedMessage> {
     const normalized: INormalizedMessage = {
       messageId: payload.messageId,
       instanceId: payload.instanceId,
+      messageRefId: payload.messageRefId || null,
+      forwarded: payload.forwarded || false,
       connectedPhone: payload.connectedPhone,
       fromMe: payload.fromMe,
       isGroup: payload.isGroup,
@@ -57,14 +59,11 @@ export class WApiNormalizer implements IMessageNormalizer {
   }
 
   normalizeConnectionStatus(payload: any): IProviderConnectionStatus {
-
     return {
-      status: payload.event === 'webhookDisconnected' && payload.disconnected == true
-        ? 'disconnected' : 'connected',
+      status: payload.event === 'webhookDisconnected' && payload.disconnected == true ? 'disconnected' : 'connected',
       instanceId: payload.instanceId,
-      eventMoment: (payload.moment || 0) * 1000,
+      eventMoment: (payload.moment || 0) * 1000
     }
-
   }
 
   private normalizeContent(msgContent: any): INormalizedMessage['content'] {

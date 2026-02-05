@@ -33,6 +33,7 @@ export interface S3UploadOptions {
   mediaKey?: string
   fileSha256?: string
   fileEncSha256?: string
+  filename?: string
   mediaType?: 'image' | 'video' | 'audio' | 'document'
   maxRetries?: number
   enableParallelUpload?: boolean
@@ -68,6 +69,7 @@ export class AmazonS3Module {
       mediaKey,
       fileSha256,
       fileEncSha256,
+      filename,
       mediaType,
       maxRetries = 3
     } = options
@@ -86,7 +88,8 @@ export class AmazonS3Module {
         mediaKey,
         mediaType,
         fileSha256,
-        fileEncSha256
+        fileEncSha256,
+        filename
       )
 
       console.log(`✅ [S3] Arquivo processado via ${processingMethod} - Tamanho: ${buffer.length} bytes`)
@@ -151,7 +154,8 @@ export class AmazonS3Module {
     mediaKey?: string,
     mediaType?: 'image' | 'video' | 'audio' | 'document',
     fileSha256?: string,
-    fileEncSha256?: string
+    fileEncSha256?: string,
+    filename?: string
   ): Promise<{ buffer: Buffer; mimetype: string; processingMethod: string }> {
     // Verificar se precisa descriptografar
     const needsDecryption = this.needsDecryption(mediaUrl, mediaKey, mediaType)
@@ -172,6 +176,26 @@ export class AmazonS3Module {
         mimetype: decryptResult.mimetype,
         processingMethod: 'decrypt'
       }
+    } else if (mediaUrl.startsWith('file://')) {
+      console.log(`🔄 [PROCESS] Lendo arquivo local...`)
+
+      const fs = await import('fs/promises')
+      const filePath = mediaUrl.replace('file://', '')
+
+      try {
+        const buffer = await fs.readFile(filePath)
+        const mimetype = this.inferMimetypeFromUrl(filename || filePath)
+
+        console.log(`✅ [PROCESS] Arquivo local lido - Tamanho: ${buffer.length} bytes`)
+
+        return {
+          buffer,
+          mimetype,
+          processingMethod: 'local-file'
+        }
+      } catch (error: any) {
+        throw new Error(`Erro ao ler arquivo local ${filePath}: ${error.message}`)
+      }
     } else {
       console.log(`🔄 [PROCESS] Download direto (arquivo não criptografado)...`)
 
@@ -182,7 +206,7 @@ export class AmazonS3Module {
       })
 
       const buffer = Buffer.from(response.data)
-      const mimetype = response.headers['content-type'] || this.inferMimetypeFromUrl(mediaUrl)
+      const mimetype = response.headers['content-type'] || this.inferMimetypeFromUrl(filename || mediaUrl)
 
       return {
         buffer,
@@ -416,32 +440,38 @@ export class AmazonS3Module {
    * Inferir mimetype da URL
    */
   private inferMimetypeFromUrl(url: string): string {
+    const extensionMap: { [key: string]: string } = {
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.png': 'image/png',
+      '.gif': 'image/gif',
+      '.webp': 'image/webp',
+      '.mp4': 'video/mp4',
+      '.mov': 'video/quicktime',
+      '.avi': 'video/avi',
+      '.mp3': 'audio/mpeg',
+      '.ogg': 'audio/ogg',
+      '.wav': 'audio/wav',
+      '.pdf': 'application/pdf'
+    }
+
+    const inferFromPath = (value: string): string | undefined => {
+      const ext = path.extname(value.toLowerCase())
+      if (!ext) return undefined
+      return extensionMap[ext]
+    }
+
     try {
-      const urlPath = new URL(url).pathname.toLowerCase()
-
-      // Mapear extensões para mimetypes
-      const extensionMap: { [key: string]: string } = {
-        '.jpg': 'image/jpeg',
-        '.jpeg': 'image/jpeg',
-        '.png': 'image/png',
-        '.gif': 'image/gif',
-        '.webp': 'image/webp',
-        '.mp4': 'video/mp4',
-        '.mov': 'video/quicktime',
-        '.avi': 'video/avi',
-        '.mp3': 'audio/mpeg',
-        '.ogg': 'audio/ogg',
-        '.wav': 'audio/wav',
-        '.pdf': 'application/pdf'
+      const normalized = url.startsWith('file://') ? url.replace('file://', '') : url
+      if (!normalized.startsWith('http://') && !normalized.startsWith('https://')) {
+        const inferred = inferFromPath(normalized)
+        if (inferred) return inferred
       }
 
-      for (const [ext, mimetype] of Object.entries(extensionMap)) {
-        if (urlPath.endsWith(ext)) {
-          return mimetype
-        }
-      }
+      const urlPath = new URL(normalized).pathname.toLowerCase()
+      const inferred = inferFromPath(urlPath)
+      if (inferred) return inferred
 
-      // Fallback baseado no domínio/padrão WhatsApp
       if (url.includes('whatsapp.net')) {
         if (url.includes('image') || url.includes('img')) return 'image/jpeg'
         if (url.includes('video')) return 'video/mp4'

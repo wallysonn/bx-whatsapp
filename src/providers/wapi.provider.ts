@@ -2,13 +2,12 @@ import { IMessageConfirm } from './interfaces/message-confirm.interface'
 import { IProviderMessage } from './interfaces/provider-message.interface'
 import { Provider } from './provider'
 
-export class WApiProvider extends Provider implements IProviderMessage {
+export class WAPIProvider extends Provider implements IProviderMessage {
   private baseUrl: string
   private instanceId: string
   private token: string
 
   constructor(instanceId: string, token: string) {
-
     super()
 
     this.baseUrl = 'https://api.w-api.app/v1'
@@ -29,11 +28,25 @@ export class WApiProvider extends Provider implements IProviderMessage {
     return `${this.baseUrl}/message/send-${messageType}?instanceId=${this.instanceId}`
   }
 
-  async sendMessageText(phone: string, message: string): Promise<IMessageConfirm> {
-    const { data } = await this.clientHttp.post(this.getUrlSendMessage('text'), {
-      phone,
-      message
-    })
+  private messageContainer(container: object, messageRefId?: string) {
+    let data = { ...container } as any
+    if (messageRefId) {
+      data.messageId = messageRefId
+    }
+    return data
+  }
+
+  async sendMessageText(phone: string, message: string, messageRefId?: string): Promise<IMessageConfirm> {
+    const { data } = await this.clientHttp.post(
+      this.getUrlSendMessage('text'),
+      this.messageContainer(
+        {
+          phone,
+          message
+        },
+        messageRefId
+      )
+    )
     return {
       messageId: data.messageId ?? '',
       insertedId: data.insertedId ?? '',

@@ -14,15 +14,52 @@ export default class WebhookController extends Controller {
     this.mediaProcessor = new MediaProcessorService()
   }
 
+  /**
+   * -- method GET
+   * @param req
+   * @param res
+   */
+  integrationValidate = async (req: Request, res: Response) => {
+    const params = req.query as any
+
+    console.log('webhook - params', params)
+    /**
+     * x-api-key': '7d8ec7c7-300b-46c6-987b-bfb459cf50a7',
+  'hub.mode': 'subscribe',
+  'hub.challenge': '1719650147',
+  'hub.verify_token': '7d8ec7c7-300b-46c6-987b-bfb459cf50a7'
+     */
+
+    const mode = params['hub.mode'] ?? null
+    const token = params['hub.verify_token'] ?? null
+    const challenge = params['hub.challenge'] ?? null
+
+    if (mode === 'subscribe') {
+      res.status(200).send(challenge)
+      return
+    }
+
+    res.status(403).send('Forbidden')
+  }
+
   onReceivedMessage = async (req: Request, res: Response) => {
     try {
       const tenant = this.getTenant(req)
       const webhookPayload = req.body
 
-      console.log('webhook - content', webhookPayload)
+      //hack para whatsapp api oficial
+      if (webhookPayload['object'] === 'whatsapp_business_account') {
+        //verifica se é uma atualização de status
+        if (webhookPayload['entry']?.[0]?.changes?.[0]?.value?.statuses?.[0]?.status) {
+          return await this.onStatusMessage(req, res)
+        }
+      }
 
       // Normalizar a mensagem recebida
-      let normalizedMessage: INormalizedMessage = MessageNormalizerService.normalizeWebhookMessage(webhookPayload)
+      let normalizedMessage: INormalizedMessage = await MessageNormalizerService.normalizeWebhookMessage(
+        webhookPayload,
+        tenant
+      )
 
       console.log('Mensagem normalizada:', {
         messageId: normalizedMessage.messageId,
@@ -35,7 +72,7 @@ export default class WebhookController extends Controller {
       // Processar mídia se existir (passando o tenant)
       if (this.hasMedia(normalizedMessage)) {
         console.log(`Processando mídia da mensagem para tenant ${tenant.name} (Bucket: ${tenant.uuid})...`)
-        // Gerar URL com 24 horas de validade para dar tempo ao outro microserviço processar
+        // Gerar URL com 24 horas de validade para dar tempo ao outro microsserviço processar
         const mediaResult = await this.mediaProcessor.processMessageMedia(normalizedMessage, tenant, {
           urlExpiresIn: 86400,
           skipOnError: true, // Adicionar esta opção para continuar mesmo com erro MAC
@@ -99,7 +136,6 @@ export default class WebhookController extends Controller {
     })
   }
 
-
   onConnectionStatus = async (req: Request, res: Response) => {
     const payload = req.body
     const tenant = this.getTenant(req)
@@ -110,15 +146,18 @@ export default class WebhookController extends Controller {
     console.log('normalized', normalized)
     //envia para kafka
 
-    await sendMessage('connection-status', {
-      id: Date.now(),
-      tenant: tenant,
-      timestamp: new Date().toISOString(),
-      ...normalized,
-    }, tenant)
+    await sendMessage(
+      'connection-status',
+      {
+        id: Date.now(),
+        tenant: tenant,
+        timestamp: new Date().toISOString(),
+        ...normalized
+      },
+      tenant
+    )
 
     return res.status(200).json(normalized)
-
   }
 
   private async processNormalizedMessage(message: INormalizedMessage, tenant: any) {

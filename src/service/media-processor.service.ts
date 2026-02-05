@@ -86,6 +86,7 @@ export class MediaProcessorService {
         mediaKey: media.mediaKey,
         fileSha256: media.fileSha256,
         fileEncSha256: media.fileEncSha256,
+        filename: media.filename,
         mediaType: this.getMediaTypeFromContentType(message.content.type),
         maxRetries
       }
