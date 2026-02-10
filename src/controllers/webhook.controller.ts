@@ -5,7 +5,6 @@ import { MediaProcessorService } from '../service/media-processor.service'
 import { INormalizedMessage } from '../interfaces/INormalizedMessage'
 import { sendMessage } from '../kafka/producer'
 import { IMessageStatus } from '../interfaces/IMessageStatus'
-
 export default class WebhookController extends Controller {
   private mediaProcessor: MediaProcessorService
 

@@ -6,6 +6,7 @@ import fs from 'fs'
 import path from 'path'
 import { pipeline } from 'stream/promises'
 import { createWriteStream } from 'fs'
+import { WABA } from '../env'
 
 interface WabaProviderConfigInterface {
   access_token: string
@@ -28,19 +29,19 @@ export class WabaProvider extends Provider implements IProviderMessage {
   private baseUrl: string
   private config: WabaProviderConfigInterface
   private tempDir: string = '/tmp/waba'
-  private version: string = 'v22.0'
+  private version: string = WABA.API_VERSION
 
   constructor(config: WabaProviderConfigInterface) {
     super()
 
     this.baseUrl = `${this.API_URL}/{version}/{phone_number_id}`
     this.config = config
+    this.config.access_token = WABA.ACCESS_TOKEN
 
     if (!this.config.access_token || !this.config.business_account_id || !this.config.phone_number_id) {
       throw new Error('access_token, business_account_id e phone_number_id são obrigatórios')
     }
 
-    this.version = config.version || 'v22.0'
     this.baseUrl = this.baseUrl.replace('{version}', this.version).replace('{phone_number_id}', config.phone_number_id)
 
     this.clientHttp.defaults.headers.common['Authorization'] = `Bearer ${this.config.access_token}`

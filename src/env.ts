@@ -16,3 +16,8 @@ export const AWS_S3 = {
   ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || 'your-access-key-id',
   SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || 'your-secret-access-key'
 }
+
+export const WABA = {
+  ACCESS_TOKEN: process.env.WABA_ACCESS_TOKEN || 'your-waba-access-token',
+  API_VERSION: process.env.WABA_API_VERSION || 'v24.0'
+}
