@@ -4,3 +4,4 @@ src/logs/history
 .idea
 .env
 build
+temp/
