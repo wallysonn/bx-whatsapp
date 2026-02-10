@@ -29,6 +29,9 @@ export class WabaNormalizer implements IMessageNormalizer {
       throw new Error('Payload inválido: Nenhuma mensagem encontrada.')
     }
 
+    console.log('tenant', tenant)
+    console.log('canais do tenant', tenant.channels)
+
     const channel = tenant.channels?.find((c: IChannel) => c.platformId === metadata?.phone_number_id) || null
 
     if (!channel) {

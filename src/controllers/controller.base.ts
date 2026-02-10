@@ -9,6 +9,9 @@ export default class Controller {
 
   public async sendMessage(req: Request, messageRequest: IMessageRequest) {
     const tenant = this.getTenant(req)
+    if (!tenant) {
+      throw new Error('Tenant not found')
+    }
     return await ProviderService.sendMessage(tenant, messageRequest)
   }
 }

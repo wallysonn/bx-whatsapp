@@ -2,6 +2,12 @@ import express from 'express'
 import { ITenant } from '../interfaces/ITenant'
 
 export default function (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const isWaba: boolean = (req.headers['x-waba'] || (undefined as any)) === 'true'
+  if (isWaba) {
+    ;(req as any).waba = true
+    return next()
+  }
+
   if (req.hostname !== 'localhost') {
     console.log('Forbidden for this host', req.headers, req.params, req.query, req.hostname)
     res.status(403).send({

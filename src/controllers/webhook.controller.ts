@@ -36,15 +36,19 @@ export default class WebhookController extends Controller {
 
   onReceivedMessage = async (req: Request, res: Response) => {
     try {
-      const tenant = this.getTenant(req)
+      let tenant = this.getTenant(req)
       const webhookPayload = req.body
 
       //hack para whatsapp api oficial
       if (webhookPayload['object'] === 'whatsapp_business_account') {
-        //verifica se é uma atualização de status
         if (webhookPayload['entry']?.[0]?.changes?.[0]?.value?.statuses?.[0]?.status) {
           return await this.onStatusMessage(req, res)
         }
+      }
+
+      if (!tenant) {
+        res.status(403).send('Forbidden')
+        return
       }
 
       // Normalizar a mensagem recebida
@@ -115,6 +119,10 @@ export default class WebhookController extends Controller {
 
   onStatusMessage = async (req: Request, res: Response) => {
     const tenant = this.getTenant(req)
+    if (!tenant) {
+      res.status(403).send('Forbidden')
+      return
+    }
     const webhookPayload = req.body
     console.log('webhook - onStatusMessage', webhookPayload)
     let normalizedMessage: IMessageStatus = MessageNormalizerService.normalizeWebhookStatusMessage(webhookPayload)
@@ -131,6 +139,10 @@ export default class WebhookController extends Controller {
   onConnectionStatus = async (req: Request, res: Response) => {
     const payload = req.body
     const tenant = this.getTenant(req)
+    if (!tenant) {
+      res.status(403).send('Forbidden')
+      return
+    }
 
     console.log('webhook - onConnectionStatus', payload)
     console.log('normalizando evento...')
