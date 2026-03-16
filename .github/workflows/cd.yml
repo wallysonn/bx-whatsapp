@@ -32,8 +32,8 @@ jobs:
             git pull origin main
 
             echo ">>> Installing and building..."
-            yarn install
-            yarn build
+            npm install
+            npm run build
 
             echo ">>> Copying package.json and .env..."
             cp package.json build/
@@ -41,7 +41,7 @@ jobs:
 
             echo ">>> Installing production dependencies..."
             cd build
-            yarn install
+            npm install --omit=dev
 
             # ── 2. Empacotar o que está em produção ANTES de substituir ───
             echo ">>> Packing current production into release $RELEASE_NAME..."
