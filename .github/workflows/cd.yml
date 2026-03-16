@@ -41,7 +41,7 @@ jobs:
 
             echo ">>> Installing production dependencies..."
             cd build
-            yarn workspaces focus --all --production
+            yarn install
 
             # ── 2. Empacotar o que está em produção ANTES de substituir ───
             echo ">>> Packing current production into release $RELEASE_NAME..."
