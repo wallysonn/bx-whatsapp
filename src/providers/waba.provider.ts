@@ -2,10 +2,9 @@ import { AxiosError } from 'axios'
 import { IMessageConfirm } from './interfaces/message-confirm.interface'
 import { IProviderMessage } from './interfaces/provider-message.interface'
 import { Provider } from './provider'
-import fs from 'fs'
+import fs, { createWriteStream } from 'fs'
 import path from 'path'
 import { pipeline } from 'stream/promises'
-import { createWriteStream } from 'fs'
 import { WABA } from '../env'
 
 interface WabaProviderConfigInterface {
@@ -265,10 +264,43 @@ export class WabaProvider extends Provider implements IProviderMessage {
         body: message
       }
     }
-    const confirm = await this.sendMessage(obj)
 
-    return confirm
+
+    return await this.sendMessage(obj)
   }
+
+  async sendInteractive(phone: string, interactiveData: any, messageRefId?: string): Promise<IMessageConfirm> {
+    console.log('enviando mensagem de interativa', interactiveData)
+    const base = this.objectMessage('interactive', phone, messageRefId)
+    const obj = {
+      ...base,
+      interactive: interactiveData,
+    }
+
+    return await this.sendMessage(obj)
+  }
+
+  async sendTemplate(phone: string, templateName: string, components?: any, messageRefId?: string) : Promise<IMessageConfirm> {
+
+    const base = this.objectMessage('template', phone, messageRefId)
+    const obj = {
+      ...base,
+      template: {
+        name: templateName,
+        language: {
+          code: 'pt_BR'
+        }
+      }
+    }
+
+    if (components && Array.isArray(components)) {
+      obj.template.components = components
+    }
+
+    return await this.sendMessage(obj)
+
+  }
+
 
   sendMessageImage(phone: string, image: string): Promise<IMessageConfirm> {
     throw new Error('sendMessageImage não implementado')

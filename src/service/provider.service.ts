@@ -17,6 +17,32 @@ export interface ITextMessageRequest extends IBaseMessageRequest {
   message: string
 }
 
+export interface IInteractiveMessageRequest extends IBaseMessageRequest {
+  type: 'interactive'
+  interactive: any
+}
+
+
+type TemplateParameter = {
+  type: string
+  text: string
+}
+
+type TemplateComponent = {
+  type: string
+  parameters: TemplateParameter[]
+  sub_type?: string
+  index?: string
+}
+
+export interface ITemplateMessageRequest extends IBaseMessageRequest {
+  type: 'template'
+  template: {
+    name: string,
+    components: TemplateComponent[]
+  }
+}
+
 export interface IImageMessageRequest extends IBaseMessageRequest {
   type: 'image'
   image: string
@@ -65,6 +91,8 @@ export type IMessageRequest =
   | IDocumentMessageRequest
   | ILocationMessageRequest
   | IContactMessageRequest
+  | IInteractiveMessageRequest
+  | ITemplateMessageRequest
 
 export class ProviderService {
   /**
@@ -115,6 +143,12 @@ export class ProviderService {
     switch (messageRequest.type) {
       case 'text':
         return await provider.sendMessageText(messageRequest.phone, messageRequest.message, messageRequest.messageRefId)
+
+      case 'interactive':
+        return await provider.sendInteractive(messageRequest.phone, messageRequest.interactive, messageRequest.messageRefId)
+
+      case 'template' :
+        return await provider.sendTemplate(messageRequest.phone, messageRequest.template.name, messageRequest.template.components, messageRequest.messageRefId)
 
       case 'image':
         return await provider.sendMessageImage(

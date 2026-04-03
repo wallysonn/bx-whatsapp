@@ -22,6 +22,7 @@ export class WapiProvider extends Provider implements IProviderMessage {
     this.clientHttp.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
   }
 
+
   private getUrlSendMessage(
     messageType: 'text' | 'image' | 'audio' | 'video' | 'document' | 'location' | 'contact'
   ): string {
@@ -53,6 +54,15 @@ export class WapiProvider extends Provider implements IProviderMessage {
       instanceId: data.instanceId ?? this.instanceId
     }
   }
+
+  sendInteractive(phone: string, interactiveData: any, messageRefId?: string) : Promise<IMessageConfirm> {
+    throw new Error('sendInteractive não implementado')
+  }
+
+  async sendTemplate(phone: string, templateName: string, components?: any, messageRefId?: string) : Promise<IMessageConfirm> {
+    throw new Error('sendTemplate não implementado')
+  }
+
   sendMessageImage(phone: string, image: string): Promise<IMessageConfirm> {
     throw new Error('sendMessageImage não implementado')
   }

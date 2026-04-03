@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 
 export interface IMessageController {
   sendText(req: Request, res: Response): Promise<Response>
+  sendInteractive(req: Request, res: Response): Promise<Response>
+  sendTemplate(req: Request, res: Response): Promise<Response>
   sendImage(req: Request, res: Response): Promise<Response>
   sendVideo(req: Request, res: Response): Promise<Response>
   sendAudio(req: Request, res: Response): Promise<Response>

@@ -8,7 +8,7 @@ import {
   IAudioMessageRequest,
   IDocumentMessageRequest,
   ILocationMessageRequest,
-  IContactMessageRequest
+  IContactMessageRequest, IInteractiveMessageRequest
 } from '../service/provider.service'
 
 export default class MessageController extends Controller implements IMessageController {
@@ -18,6 +18,50 @@ export default class MessageController extends Controller implements IMessageCon
       const messageRequest: ITextMessageRequest = {
         ...req.body,
         type: 'text'
+      }
+
+      const result = await this.sendMessage(req, messageRequest)
+
+      return res.status(200).json({
+        success: true,
+        ...result
+      })
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error?.message || 'Error sending text'
+      })
+    }
+  }
+
+  sendInteractive = async (req: Request, res: Response) => {
+    try {
+      // Cria o messageRequest sem modificar o req original
+      const messageRequest: IInteractiveMessageRequest = {
+        ...req.body,
+        type: 'interactive'
+      }
+
+      const result = await this.sendMessage(req, messageRequest)
+
+      return res.status(200).json({
+        success: true,
+        ...result
+      })
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error?.message || 'Error sending text'
+      })
+    }
+  }
+
+  sendTemplate = async (req: Request, res: Response) => {
+    try {
+      // Cria o messageRequest sem modificar o req original
+      const messageRequest: IInteractiveMessageRequest = {
+        ...req.body,
+        type: 'template'
       }
 
       const result = await this.sendMessage(req, messageRequest)

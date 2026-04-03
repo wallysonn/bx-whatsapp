@@ -6,6 +6,8 @@ const router: Router = express.Router()
 const messageController = new MessageController()
 
 router.post('/message/send-text', messageController.sendText)
+router.post('/message/send-interactive', messageController.sendInteractive)
+router.post('/message/send-template', messageController.sendTemplate)
 router.post('/message/send-image', messageController.sendImage)
 router.post('/message/send-video', messageController.sendVideo)
 router.post('/message/send-audio', messageController.sendAudio)
