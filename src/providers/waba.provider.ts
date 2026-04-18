@@ -265,23 +265,27 @@ export class WabaProvider extends Provider implements IProviderMessage {
       }
     }
 
-
     return await this.sendMessage(obj)
   }
 
   async sendInteractive(phone: string, interactiveData: any, messageRefId?: string): Promise<IMessageConfirm> {
     console.log('enviando mensagem de interativa', interactiveData)
+
     const base = this.objectMessage('interactive', phone, messageRefId)
     const obj = {
       ...base,
-      interactive: interactiveData,
+      interactive: interactiveData
     }
 
     return await this.sendMessage(obj)
   }
 
-  async sendTemplate(phone: string, templateName: string, components?: any, messageRefId?: string) : Promise<IMessageConfirm> {
-
+  async sendTemplate(
+    phone: string,
+    templateName: string,
+    components?: any,
+    messageRefId?: string
+  ): Promise<IMessageConfirm> {
     const base = this.objectMessage('template', phone, messageRefId)
     const obj = {
       ...base,
@@ -297,10 +301,10 @@ export class WabaProvider extends Provider implements IProviderMessage {
       obj.template.components = components
     }
 
+    console.log('enviando mensagem de template', obj)
+
     return await this.sendMessage(obj)
-
   }
-
 
   sendMessageImage(phone: string, image: string): Promise<IMessageConfirm> {
     throw new Error('sendMessageImage não implementado')

@@ -22,7 +22,6 @@ export interface IInteractiveMessageRequest extends IBaseMessageRequest {
   message: any
 }
 
-
 type TemplateParameter = {
   type: string
   text: string
@@ -38,44 +37,54 @@ type TemplateComponent = {
 export interface ITemplateMessageRequest extends IBaseMessageRequest {
   type: 'template'
   message: {
-    name: string,
+    name: string
     components: TemplateComponent[]
   }
 }
 
 export interface IImageMessageRequest extends IBaseMessageRequest {
   type: 'image'
-  image: string
-  caption?: string
+  message: {
+    file: string
+    caption?: string
+  }
 }
 
 export interface IVideoMessageRequest extends IBaseMessageRequest {
   type: 'video'
-  video: string
-  caption?: string
+  message: {
+    file: string
+    caption?: string
+  }
 }
 
 export interface IAudioMessageRequest extends IBaseMessageRequest {
   type: 'audio'
-  audio: string
+  message: {
+    file: string
+  }
 }
 
 export interface IDocumentMessageRequest extends IBaseMessageRequest {
   type: 'document'
-  document: string
-  filename?: string
+  message: {
+    file: string
+    filename?: string
+  }
 }
 
 export interface ILocationMessageRequest extends IBaseMessageRequest {
   type: 'location'
-  latitude: number
-  longitude: number
-  address?: string
+  message: {
+    latitude: number
+    longitude: number
+    address?: string
+  }
 }
 
 export interface IContactMessageRequest extends IBaseMessageRequest {
   type: 'contact'
-  contact: {
+  message: {
     name: string
     phone: string
     email?: string
@@ -134,11 +143,36 @@ export class ProviderService {
     return this.createProviderInstance(selectedChannel)
   }
 
+  private static parseMessageObjectContent(messageObject: any): any {
+    if (!messageObject) {
+      return null
+    }
+
+    if (!('message' in messageObject)) {
+      return null
+    }
+
+    let message = messageObject.message
+    if (typeof message === 'string') {
+      try {
+        message = messageObject.message = JSON.parse(message)
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    return messageObject
+  }
+
   /**
    * Envia mensagem usando o provider apropriado baseado no tipo
    */
   static async sendMessage(tenant: ITenant, messageRequest: IMessageRequest) {
     const provider = this.getProviderForMessage(tenant, messageRequest)
+
+    if (messageRequest.type !== 'text') {
+      messageRequest = this.parseMessageObjectContent(messageRequest)
+    }
 
     switch (messageRequest.type) {
       case 'text':
@@ -147,33 +181,42 @@ export class ProviderService {
       case 'interactive':
         return await provider.sendInteractive(messageRequest.phone, messageRequest.message, messageRequest.messageRefId)
 
-      case 'template' :
-        return await provider.sendTemplate(messageRequest.phone, messageRequest.message.name, messageRequest.message.components, messageRequest.messageRefId)
+      case 'template':
+        return await provider.sendTemplate(
+          messageRequest.phone,
+          messageRequest.message.name,
+          messageRequest.message.components,
+          messageRequest.messageRefId
+        )
 
       case 'image':
         return await provider.sendMessageImage(
           messageRequest.phone,
-          messageRequest.image,
-          messageRequest.caption,
+          messageRequest.message.file,
+          messageRequest.message.caption,
           messageRequest.messageRefId
         )
 
       case 'video':
         return await provider.sendMessageVideo(
           messageRequest.phone,
-          messageRequest.video,
-          messageRequest.caption,
+          messageRequest.message.file,
+          messageRequest.message.caption,
           messageRequest.messageRefId
         )
 
       case 'audio':
-        return await provider.sendMessageAudio(messageRequest.phone, messageRequest.audio, messageRequest.messageRefId)
+        return await provider.sendMessageAudio(
+          messageRequest.phone,
+          messageRequest.message.file,
+          messageRequest.messageRefId
+        )
 
       case 'document':
         return await provider.sendMessageFile(
           messageRequest.phone,
-          messageRequest.document,
-          messageRequest.filename,
+          messageRequest.message.file,
+          messageRequest.message.filename,
           messageRequest.messageRefId
         )
 

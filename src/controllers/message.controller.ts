@@ -8,7 +8,9 @@ import {
   IAudioMessageRequest,
   IDocumentMessageRequest,
   ILocationMessageRequest,
-  IContactMessageRequest, IInteractiveMessageRequest, ITemplateMessageRequest
+  IContactMessageRequest,
+  IInteractiveMessageRequest,
+  ITemplateMessageRequest
 } from '../service/provider.service'
 
 export default class MessageController extends Controller implements IMessageController {
@@ -63,6 +65,8 @@ export default class MessageController extends Controller implements IMessageCon
         ...req.body,
         type: 'template'
       }
+
+      console.log('template messageRequest', messageRequest)
 
       const result = await this.sendMessage(req, messageRequest)
 
