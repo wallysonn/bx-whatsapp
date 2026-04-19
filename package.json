@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon --exec ts-node src/app.ts",
-    "start": "node app.js",
+    "start": "node --max-http-header-size=81920 app.js",
     "build": "npx tsc"
   },
   "dependencies": {
