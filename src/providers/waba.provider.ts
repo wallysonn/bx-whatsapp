@@ -306,16 +306,73 @@ export class WabaProvider extends Provider implements IProviderMessage {
     return await this.sendMessage(obj)
   }
 
-  sendMessageImage(phone: string, image: string): Promise<IMessageConfirm> {
-    throw new Error('sendMessageImage não implementado')
+  async sendMessageImage(
+    phone: string,
+    image: string,
+    caption?: string,
+    messageRefId?: string
+  ): Promise<IMessageConfirm> {
+    console.log('enviando imagem', phone, image)
+    const base = this.objectMessage('image', phone, messageRefId)
+    const isUrl = image.startsWith('http://') || image.startsWith('https://')
+    const obj = {
+      ...base,
+      image: {
+        ...(isUrl ? { link: image } : { id: image }),
+        ...(caption ? { caption } : {})
+      }
+    }
+    return await this.sendMessage(obj)
   }
-  sendMessageVideo(phone: string, video: string): Promise<IMessageConfirm> {
-    throw new Error('sendMessageVideo não implementado')
+
+  async sendMessageVideo(
+    phone: string,
+    video: string,
+    caption?: string,
+    messageRefId?: string
+  ): Promise<IMessageConfirm> {
+    console.log('enviando video', phone, video)
+    const base = this.objectMessage('video', phone, messageRefId)
+    const isUrl = video.startsWith('http://') || video.startsWith('https://')
+    const obj = {
+      ...base,
+      video: {
+        ...(isUrl ? { link: video } : { id: video }),
+        ...(caption ? { caption } : {})
+      }
+    }
+    return await this.sendMessage(obj)
   }
-  sendMessageAudio(phone: string, audio: string): Promise<IMessageConfirm> {
-    throw new Error('sendMessageAudio não implementado')
+
+  async sendMessageAudio(phone: string, audio: string, messageRefId?: string): Promise<IMessageConfirm> {
+    console.log('enviando audio', phone, audio)
+    const base = this.objectMessage('audio', phone, messageRefId)
+    const isUrl = audio.startsWith('http://') || audio.startsWith('https://')
+    const obj = {
+      ...base,
+      audio: {
+        ...(isUrl ? { link: audio } : { id: audio })
+      }
+    }
+    return await this.sendMessage(obj)
   }
-  sendMessageFile(phone: string, file: string): Promise<IMessageConfirm> {
-    throw new Error('sendMessageFile não implementado')
+
+  async sendMessageFile(
+    phone: string,
+    file: string,
+    caption?: string,
+    messageRefId?: string
+  ): Promise<IMessageConfirm> {
+    console.log('enviando arquivo', phone, file)
+    const base = this.objectMessage('document', phone, messageRefId)
+    const isUrl = file.startsWith('http://') || file.startsWith('https://')
+    const obj = {
+      ...base,
+      document: {
+        ...(isUrl ? { link: file } : { id: file }),
+        ...(caption ? { caption } : {})
+      }
+    }
+    return await this.sendMessage(obj)
   }
 }

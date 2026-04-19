@@ -20,7 +20,16 @@ export default function (req: express.Request, res: express.Response, next: expr
   if (!tenantData) {
     return res.status(401).json({ message: 'authentication failed. Tenant not found' })
   }
-  const tenant: ITenant = JSON.parse(tenantData)
+
+  let tenant: ITenant
+  try {
+    // Decodifica de base64 se estiver codificado
+    const decodedData = Buffer.from(tenantData, 'base64').toString('utf-8')
+    tenant = JSON.parse(decodedData)
+  } catch (error) {
+    // Fallback para caso o gateway ainda não esteja enviando em base64
+    tenant = JSON.parse(tenantData)
+  }
 
   console.log('middleware tenant', tenant)
   ;(req as any).tenant = tenant
